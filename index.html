@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Find Job</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
+    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+</head>
+
+<body style="background: #3ddad7;">
+    <!-- navbar -->
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient" style="background: linear-gradient(0deg, #2a93d5 0%, #3ddad7 33%, #edfafd), #135589;">
+        <div class="container">
+            <a class="navbar-brand logo" href="#" style="font-weight: bold;color: #135589;">
+                <img src="ikonku.png" alt="" width="100" height="27" class="d-inline-block align-text-top">
+                Find Job
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navbarNav">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <!-- akhir navbar -->
+    
+    <main class="page projects-page">
+        <section class="portfolio-block projects-cards" style="padding-top: 0px;padding-bottom: 0px;margin-top: 30px;margin-bottom: 20px;background: #3ddad7;">
+            <header class="text-center text-white masthead" style="background:url('header.jpg') no-repeat center center; background-size:cover;">
+            <div class="overlay">
+            <div class="container">
+                <div class="heading" style="margin-bottom: 20px;">
+                    <h2 style="margin-bottom: 20px;font-size: 30px;font-weight: bold;color: #ffffff; text-transform: capitalize;">
+                        Lowongan Pilihan
+                    </h2>
+                </div>
+
+                <!-- tampilan awal -->
+                <div class="row" id="awalan"></div>
+                    <!-- menampilkan tampilan awal -->
+                    <script>
+                        fetch ('https://remotive.io/api/remote-jobs?limit=3').then(response=>response.json()).then(data=>{
+                            for (var i = 0; i < data.jobs.length; i++){
+                                document.getElementById('awalan').innerHTML+=
+                                '<div class="col-md-6 col-lg-4" id="awalan">'+
+                                '<div class="card border-0" style="text-align: center;">'+
+                                    '<a href="#">'+
+                                    '<img class="rounded-circle card-img-top scale-on-hover" src="'+
+                                        data.jobs[i].company_logo_url +
+                                    '" alt="Card Image" style="width: 80px;height: 80px;margin-top: 10px;"></a>'+
+                                    '<div class="card-body" style="height:220px">'+
+                                    '<h6 style="margin-bottom: 10px;">'+
+                                        '<a href="#" style="font-size: 16px;">'+
+                                            data.jobs[i].title +
+                                        '</a>'+
+                                    '</h6>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Perusahaan: '+
+                                        data.jobs[i].company_name +
+                                    '</p>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Tipe pekerjaan: '+
+                                        data.jobs[i].job_type +
+                                    '</p>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Tanggal Publikasi '+
+                                        data.jobs[i].publication_date +
+                                    '</p>'+
+                                    "<a href='"+data.jobs[i].url+"'class='btn btn-outline-primary btn-sm' role='button' aria-pressed='true'> Lebih Detail </a>"+
+                                    '</div>' +
+                                '</div>'+
+                                '</div>';
+                            }
+                        })
+                    </script>
+                    <!-- akhir tampilan awal -->
+            </div>
+            </div>
+        </section>
+
+        <section style="background: #edfafd;">
+            <div style="height: 200px;text-align: center;">
+                <h2 class="text-center" style="font-weight: bold;margin-bottom: 20px;font-size: 35px;color: #135589;margin-top: 30px;padding-top: 20px;">
+                    Find Your Dream Job Here!
+                </h2>
+                <!-- searchbar -->
+                <input class="border rounded-pill border-primary" type="search" style="text-align: center;width: 400px;height: 40px;margin-top: 0px;margin-bottom: 20px;color: #135589;border: 1px solid #135589 ;" placeholder="Input the keywords..." id="inputan">
+                <!-- akhir searchbar -->
+                <!-- button cari -->
+                <div style="text-align: center;">
+                    <button class="btn btn-primary" type="submit" style="height: 40px;margin-bottom: 20px;background: #2a93d5;" id="cari">
+                        Search
+                    </button>
+                </div>
+                <!-- akhir button cari -->
+            </div>
+        </section>
+
+        <section class="portfolio-block projects-cards" style="padding-bottom: 1px;padding-top: 0px;margin-top: 30px;margin-bottom: 20px;">
+            <!-- yang ingin ditampilkan -->
+            <div class="container">
+                <div class="heading" style="margin-bottom: 20px;">
+                    <div class="row" id="output"></div>
+                </div>
+                    <!-- function tombol cari -->
+                    <script>
+                        var cari=document.getElementById('cari');
+                        cari.addEventListener('click', tampilkanhasil);
+
+                        function tampilkanhasil(){
+                            fetch ('https://remotive.io/api/remote-jobs?search=' + document.getElementById('inputan').value).then(response=>response.json()).then(data=>{
+                            // console log
+                            console.log(data.jobs);
+                            document.getElementById('output').innerHTML="";
+                            document.getElementById('output').innerHTML+=
+                            '<h2 style="font-size: 30px;font-weight: bold;color: #ffffff; text-transform: capitalize;"> hasil pencarian'+
+                            '</h2>'
+                            if (data.jobs.length > 0){    
+                            // perulangan
+                                for (var i = 0; i < data.jobs.length; i++){
+                                document.getElementById('output').innerHTML+=
+                                '<div class="col-md-6 col-lg-4" id="awalan">'+
+                                '<div class="card border-0" style="text-align: center;">'+
+                                    '<div class="card-body" style="height:180px">'+
+                                    '<h6 style="margin-bottom: 10px;">'+
+                                        '<a href="#" style="font-size: 16px;">'+
+                                            data.jobs[i].title +
+                                        '</a>'+
+                                    '</h6>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Perusahaan: '+
+                                        data.jobs[i].company_name +
+                                    '</p>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Tipe pekerjaan: '+
+                                        data.jobs[i].job_type +
+                                    '</p>'+
+                                    '<p class="text-muted card-text" style="text-align: left;font-size: 14px;"> Tanggal Publikasi '+
+                                        data.jobs[i].publication_date +
+                                    '</p>'+
+                                    "<a href='"+data.jobs[i].url+"'class='btn btn-outline-primary btn-sm' role='button' aria-pressed='true'> Lebih Detail </a>"+
+                                    '</div>' +
+                                '</div>'+
+                                '</div>';
+                                }
+                            } else {
+                                document.getElementById('output').innerHTML +=
+                                '<div>'+
+                                    '<font color="red">' +
+                                    '<h5>Data yang Anda cari tidak ada</h5>' +
+                                    '</font>'+
+                                '</div>'
+                            }
+                            });
+                        }
+                    </script>
+                    <!-- akhir function tombol cari -->
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="page-footer" style="background: #edfafd;">
+        <div class="row align-items-start; mx-5">
+            <div class="col">
+                <a class="navbar-brand" href="#" style="font-weight: bold;color: #135589;">
+                    <b><img src="ikonku.png" alt="" width="100" height="27" class="d-inline-block align-text-top">
+                        Find Job</b>
+                </a>
+                <p style="color: #135589;">Situs ini berdasarkan API pada website Remotive.io</p>
+            </div>
+            <div class="col">
+                <p style="text-align: center; font-weight: bold;color: #135589;"><b>UAS Pemrograman</b></p>
+                <p style="text-align: left; color: #135589;">Situs ini dibuat dengan harapan dapat memenuhi nilai UAS mata kuliah Bahasa Pemrograman 2020/2021 (Semester 6).</p>
+            </div>
+            <div class="col">
+                <p style="text-align: center; font-weight: bold;color: #135589;"><b>Oleh:</b></p>
+                <p style="text-align: center;color: #135589;">Renny Diana</p>
+                <p style="text-align: center;color: #135589;">Sistem Informasi</p>
+                <p style="text-align: center;color: #135589;">Universitas Ma Chung</p>
+            </div>
+        </div>
+    </footer>
+    <!-- akhir footer -->
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
+
+</html>
